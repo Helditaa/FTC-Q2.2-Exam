@@ -28,7 +28,7 @@ contract CoToken is Ownable, ERC20 {
 
     function burn(uint256 _x) onlyOwner public payable {
         require(msg.value == _sellPrice, "Insufficient funds");
-        burn(_x);
+        _burn(msg.sender, _x);
         _tokenSupply = _tokenSupply - _x;
 
     }

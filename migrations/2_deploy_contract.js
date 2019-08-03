@@ -1,6 +1,6 @@
-var UnicoinRegistry = artifacts.require("CoToken");
+var CoToken = artifacts.require("./CoToken.sol");
 
 module.exports = function (deployer) {
-    // Deploy the UniCoin Registry contract
+    // Deploy the CoToken contract
     deployer.deploy(CoToken);
 };
