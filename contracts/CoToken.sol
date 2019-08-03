@@ -6,30 +6,38 @@ import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 
 contract CoToken is Ownable, ERC20 {
 
-uint256 _price = 0;
-uint256 _tokenSupply;
-uint256 _sellPrice;
+    uint256 _buyPrice;
+    uint256 _tokenSupply = 0;
+    uint256 _sellPrice;
 
-function buyPrice(uint256 _n) public {
-    uint256 _price = (10**16)*(_n) + (2*10**17); //Price is already in wei
+    function buyPrice(uint256 _tokenSupply) public {
+        uint256 _buyPrice = (10**16)*(_tokenSupply) + (2*10**17); //Price is already in wei
 
-}
+    }
 
-function mint(uint256 _price) public payable {
+    function sellPrice(uint256 _tokenSupply) public {
+        uint256 _sellPrice = (10**16)*(_tokenSupply) + (2*10**17); //Price is already in wei
+    }
 
-    require(msg.value == _price, "Amount does not correspond to the price");
-    _mint(msg.sender, _price);
-    // _tokenSupply ++;
-}
+    function mint(uint256 _n) public payable {
 
-function burn(uint256 _x) onlyOwner public payable {
-    require(msg.value == _sellPrice, "Insufficient funds");
-    
-}
+        require(msg.value == _buyPrice, "Amount does not correspond to the price");
+        _mint(msg.sender, _n);
+        _tokenSupply = _tokenSupply + _n;
+    }
 
-function sellPrice(uint256 _n) public {
-    uint256 _price = (10**16)*(_n) + (2*10**17); //Price is already in wei
-}
+    function burn(uint256 _x) onlyOwner public payable {
+        require(msg.value == _sellPrice, "Insufficient funds");
+        burn(_x);
+        _tokenSupply = _tokenSupply - _x;
+
+    }
+
+
+    function destroy() public onlyOwner {
+        selfdestruct(msg.sender);
+    }
+
 
 
 
