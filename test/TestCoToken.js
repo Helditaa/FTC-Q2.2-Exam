@@ -28,7 +28,6 @@ contract("CoToken", (accounts) => {
         it("Can correctly burn tokens", async () => {
             let CoTokenInstance = await CoToken.deployed()
             let numberOfTokens = await CoTokenInstance.balanceOf(buyer)
-            console.log(numberOfTokens.toNumber())
   
             await CoTokenInstance.burn(tokensToBurn, {
                 from: buyer
@@ -37,11 +36,22 @@ contract("CoToken", (accounts) => {
             let remainingTokens = numberOfTokens - tokensToBurn
             console.log(newBalanceOfTokens.toNumber())
 
-            //console.log(remainingTokens)
-
             assert.equal(newBalanceOfTokens.toNumber(), remainingTokens, "wrong number of burnt tokens")
-
         })
+
+        it("Can correctly selfdestruct", async () => {
+            let CoTokenInstance = await CoToken.deployed()
+            let balanceofOwner = await CoTokenInstance.balanceOf(buyer)
+            console.log(balanceofOwner.toNumber())
+  
+            await CoTokenInstance.destroy( {
+                from: buyer
+            })
+            console.log(balanceofOwner.toNumber())
+
+
+            //assert.equal(newBalanceOfTokens.toNumber(), remainingTokens, "wrong number of burnt tokens")
+        })        
 
 
 
